@@ -1,6 +1,16 @@
 # This file was created by: Tino Solomon
 #my first source control edit
 #import necessary modules
+
+#reflect enemy projectiles with melee
+#small enemies and boss battles
+#level ups from xp bar to get stronger
+#dodge move
+#health bar
+#different rooms with a map to not get lost
+#charge up special move
+
+
 import pygame as pg
 import sys
 from settings import *
