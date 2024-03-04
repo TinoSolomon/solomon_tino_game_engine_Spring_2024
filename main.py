@@ -7,7 +7,7 @@
 #level ups from xp bar to get stronger
 #dodge move
 #health bar
-#different rooms with a map to not get lost
+#different rooms with a map to not get lost - maybe randomly generated idk
 #charge up special move
 
 
