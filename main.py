@@ -9,6 +9,9 @@
 #health bar
 #different rooms with a map to not get lost - maybe randomly generated idk
 #charge up special move
+#music
+#textures or images with animation
+
 
 
 import pygame as pg
@@ -87,9 +90,9 @@ class Game:
 #define the grid
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
+            pg.draw.line(self.screen, TAN, (x, 0), (x, HEIGHT))
         for y in range(0, WIDTH, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
+            pg.draw.line(self.screen, TAN, (0, y), (WIDTH, y))
 
     def draw(self):
         self.screen.fill(BGCOLOR)
