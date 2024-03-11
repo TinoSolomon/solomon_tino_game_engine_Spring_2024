@@ -4,7 +4,7 @@ TITLE = "my fun game"
 
 FPS = 60
 
-PLAYER_SPEED = 300
+PLAYER_SPEED = 175
 
 #this is 32 grids wide
 WIDTH = 1024
@@ -20,3 +20,4 @@ RED = (255, 0, 0)
 PURPLE = (255, 0, 255)
 TAN = (210, 180, 140)
 BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
