@@ -1,22 +1,26 @@
 # This file was created by: Tino Solomon
-#my first source control edit
-#import necessary modules
 
-#reflect enemy projectiles with melee
-#small enemies and boss battles
-#level ups from xp bar to get stronger
-#dodge move
-#health bar
-#different rooms with a map to not get lost - maybe randomly generated idk
-#charge up special move
+#completed features:
 #music
-#textures or images with animation
+#start screen
+
+#need to do:
+#fix enemies
+#add health bar
+#enemy attacks and player attacks
+#shift to dodge
+
+#want to do
+#big enemy
+#multiple rooms with a map
+#deflect enemy projectiles
+#xp bar to level up stats
+#charge up special move
+#textures and animations
 
 
-
+#import necessary modules
 import pygame as pg
-#add music
-
 import sys
 from settings import *
 from sprites import *
@@ -45,8 +49,8 @@ class Game:
             for line in f:
                 self.map_data.append(line)
     #music files
-        self.start_menu_music = pg.mixer.Sound(path.join(game_folder, 'start_menu_music.wav'))
-        self.game_music = pg.mixer.Sound(path.join(game_folder, 'game_music.wav'))
+        #self.start_menu_music = pg.mixer.Sound(path.join(game_folder, 'start_menu_music.wav'))
+        #self.game_music = pg.mixer.Sound(path.join(game_folder, 'game_music.wav'))
 
 #init all variables, setup groups, instaintiate classes
     def new(self):
@@ -74,7 +78,7 @@ class Game:
                     Mob(self, col, row)
                 if tile == 'U':
                     PowerUp(self, col, row)
-        pg.mixer.music.load(self.game_music)
+        pg.mixer.music.load('game_music.wav')
         pg.mixer.music.play(loops=-1)
     
     # define run method
@@ -131,12 +135,12 @@ class Game:
                 #if event.key == pg.K_DOWN:
                     #self.player.move(dy=1)
                     
-#start screen
+#start screen from Mr. Cozort
     def show_start_screen(self):
         self.screen.fill(DARKGREEN)
         self.draw_text(self.screen, "Press Any Key Start", 24, WHITE, WIDTH/2 - 32, 2)
         pg.display.flip()
-        pg.mixer.music.load(self.start_menu_music)
+        pg.mixer.music.load('start_menu_music.wav')
         pg.mixer.music.play(loops=-1)
         self.wait_for_key()
 
