@@ -3,20 +3,22 @@
 #completed features:
 #music
 #start screen
+#dodge/dash with shift
 
 #need to do:
 #fix enemies
 #add health bar
 #enemy attacks and player attacks
-#shift to dodge
+#sound effects
+#multiple rooms or levels
+#textures and images
 
 #want to do
-#big enemy
-#multiple rooms with a map
+#big enemy with its own music and a big health bar
 #deflect enemy projectiles
 #xp bar to level up stats
 #charge up special move
-#textures and animations
+#animations
 
 
 #import necessary modules
@@ -138,7 +140,7 @@ class Game:
 #start screen from Mr. Cozort
     def show_start_screen(self):
         self.screen.fill(DARKGREEN)
-        self.draw_text(self.screen, "Press Any Key Start", 24, WHITE, WIDTH/2 - 32, 2)
+        self.draw_text(self.screen, "Press Any Key To Start", 24, WHITE, WIDTH/2 - 32, 2)
         pg.display.flip()
         pg.mixer.music.load('start_menu_music.wav')
         pg.mixer.music.play(loops=-1)

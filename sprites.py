@@ -9,7 +9,6 @@ from settings import *
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites
-        # init super class
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
@@ -20,26 +19,32 @@ class Player(pg.sprite.Sprite):
         self.y = y * TILESIZE
         self.moneybag = 0
         self.speed = 300
-
-    #def move(self, dx=0, dy=0):
-    #    self.x += dx
-    #    self.y += dy
-        
+        #dash/dodge
+        self.dash_start_time = 0
+        self.dash_duration = 1
 
     def get_keys(self):
         self.vx, self.vy = 0, 0
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
-            self.vx = -PLAYER_SPEED
+            self.vx = -self.speed
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
-            self.vx = PLAYER_SPEED
+            self.vx = self.speed
         if keys[pg.K_UP] or keys[pg.K_w]:
-            self.vy = -PLAYER_SPEED
+            self.vy = -self.speed
         if keys[pg.K_DOWN] or keys[pg.K_s]:
-            self.vy = PLAYER_SPEED
-        if self.vx != 0 and self.vy !=0:
-                self.vx * 0.7071
-                self.vy * 0.7071
+            self.vy = self.speed
+        if keys[pg.K_LSHIFT] or keys[pg.K_RSHIFT]:
+            if self.dash_start_time == 0:
+                self.dash_start_time = pg.time.get_ticks()
+            if pg.time.get_ticks() - self.dash_start_time < self.dash_duration * 100:
+                self.vx *= 2
+                self.vy *= 2
+        else:
+            self.dash_start_time = 0
+        if self.vx != 0 and self.vy != 0:
+            self.vx *= 0.7071
+            self.vy *= 0.7071
                 #yay math!
     #def collide_with_obj(self, group, kill):
     #    hits = pg.sprite.spritecollide(self, self.game.group, kill)
@@ -71,12 +76,12 @@ class Player(pg.sprite.Sprite):
         hits = pg.sprite.spritecollide(self, group, True)
         if hits:
             if str(hits[0].__class__.__name__) == "Coin":
-                self.moneybag += 1
+                self.speed += 100
             if str(hits[0].__class__.__name__) == "PowerUp":
                 #print(hits[0].__class__.__name__)
-                self.speed += 300
+                self.speed -= 100
             if str(hits[0].__class__.__name__) == "Mob":
-                self.kill
+                self.kill = False
 
     def update(self):
         self.get_keys()
@@ -125,7 +130,7 @@ class PowerUp(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(PURPLE)
+        self.image.fill(BLACK)
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
