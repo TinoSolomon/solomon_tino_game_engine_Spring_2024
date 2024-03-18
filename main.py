@@ -35,6 +35,7 @@ class Game:
     # define window size
     def __init__(self):
         pg.init()
+        #mixer for music
         pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
@@ -80,6 +81,8 @@ class Game:
                     Mob(self, col, row)
                 if tile == 'U':
                     PowerUp(self, col, row)
+    
+    #load music and loop it
         pg.mixer.music.load('game_music.wav')
         pg.mixer.music.play(loops=-1)
     
@@ -142,6 +145,7 @@ class Game:
         self.screen.fill(DARKGREEN)
         self.draw_text(self.screen, "Press Any Key To Start", 24, WHITE, WIDTH/2 - 32, 2)
         pg.display.flip()
+#load and loop music
         pg.mixer.music.load('start_menu_music.wav')
         pg.mixer.music.play(loops=-1)
         self.wait_for_key()
@@ -149,6 +153,7 @@ class Game:
     def wait_for_key(self):
         waiting = True
         while waiting:
+            #import  FPS from settings
             self.clock.tick(FPS)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -161,6 +166,7 @@ class Game:
 #instantiating game class (create instance of game)
 g = Game()
 
+#showing the start screen
 g.show_start_screen()
 while (True):
     g.new()

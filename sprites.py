@@ -23,6 +23,7 @@ class Player(pg.sprite.Sprite):
         self.dash_start_time = 0
         self.dash_duration = 1
 
+#keybinds for movement controls
     def get_keys(self):
         self.vx, self.vy = 0, 0
         keys = pg.key.get_pressed()
@@ -34,6 +35,7 @@ class Player(pg.sprite.Sprite):
             self.vy = -self.speed
         if keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vy = self.speed
+#shift to dash - found pg.time.get_ticks() on google
         if keys[pg.K_LSHIFT] or keys[pg.K_RSHIFT]:
             if self.dash_start_time == 0:
                 self.dash_start_time = pg.time.get_ticks()
