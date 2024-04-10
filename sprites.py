@@ -53,6 +53,18 @@ class Player(pg.sprite.Sprite):
     #    if hits:
     #        self.rect.x.width += 25
     #        self.rect.y.width += 25
+            
+class Animated_sprite(Sprite):
+    def __init__(self):
+        Sprite.__init__(self)
+        self.spritesheet = Spritesheet(path.join(img_dir, SPRITESHEET))
+        self.load_images()
+        self.image = self.standing_frames[0]
+        self.rect = self.image.get_rect()
+        self.jumping = False
+        self.walking = False
+        self.current_frame = 0
+        self.last_update = 0
 
     def collide_with_walls(self, dir):
         if dir == 'x':
