@@ -43,6 +43,7 @@ class Game:
         pg.key.set_repeat(500, 100)
         self.load_data()
         self.running = True
+        self.timer = 90 #90 second timer
 
     # load save game data
     def load_data(self):
@@ -103,7 +104,11 @@ class Game:
 #define update
     def update(self):
         self.all_sprites.update()
-
+        # Update timer
+        self.timer -= self.dt
+        if self.timer <= 0:
+            self.show_start_screen()
+            self.timer = 90 #reset timer
 #define the grid
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -123,6 +128,8 @@ class Game:
         self.screen.fill(BGCOLOR)
         self.draw_grid()
         self.all_sprites.draw(self.screen)
+        # Display timer in the top left corner
+        self.draw_text(self.screen, f'Time: {int(self.timer)}', 18, WHITE, 10, 10)
         pg.display.flip()
 
     # define input method
@@ -165,6 +172,10 @@ class Game:
 
 #instantiating game class (create instance of game)
 g = Game()
+while True:
+    g.show_start_screen()
+    g.new()
+    g.run()
 
 #showing the start screen
 g.show_start_screen()
