@@ -112,13 +112,25 @@ class Player(pg.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.bottom = bottom
     def update(self):
-        # needed for animated sprite
-        self.animate()
+        #print("Player update method called")  # Check if update method is called
         self.get_keys()
-        # self.power_up_cd.ticking()
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
-        # this order of operations for rect settings and collision is imperative
+        self.rect.x = self.x
+        # add collision later
+        self.collide_with_walls('x')
+        self.rect.y = self.y
+        # add collision later
+        self.collide_with_walls('y')
+        self.collide_with_group(self.game.coins, True)
+        self.collide_with_group(self.game.power_ups, True)
+        self.collide_with_mobs()  # Check for collisions with mobs
+
+    def collide_with_mobs(self):
+        hits = pg.sprite.spritecollide(self, self.game.mobs, False)
+        if hits:
+            #print("Player collided with a mob!")  # Check if collision is detected
+            self.game.show_start_screen()  # Reset the game to the title screen
 
     def collide_with_walls(self, dir):
         if dir == 'x':
@@ -151,18 +163,18 @@ class Player(pg.sprite.Sprite):
             if str(hits[0].__class__.__name__) == "Mob":
                 self.kill = False
 
-    def update(self):
-        self.get_keys()
-        self.x += self.vx * self.game.dt
-        self.y += self.vy * self.game.dt
-        self.rect.x = self.x
-        # add collision later
-        self.collide_with_walls('x')
-        self.rect.y = self.y
-        # add collision later
-        self.collide_with_walls('y')
-        self.collide_with_group(self.game.coins, True)
-        self.collide_with_group(self.game.power_ups, True)
+    #def update(self):
+    #    self.get_keys()
+    #    self.x += self.vx * self.game.dt
+    #    self.y += self.vy * self.game.dt
+    #    self.rect.x = self.x
+    #    # add collision later
+    #    self.collide_with_walls('x')
+    #    self.rect.y = self.y
+    #    # add collision later
+    #    self.collide_with_walls('y')
+    #    self.collide_with_group(self.game.coins, True)
+    #    self.collide_with_group(self.game.power_ups, True)
 
 # create a wall class
 class Wall(pg.sprite.Sprite):
