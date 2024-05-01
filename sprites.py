@@ -263,3 +263,24 @@ class Mob(pg.sprite.Sprite):
         self.collide_with_walls('x')
         self.rect.y = self.y
         self.collide_with_walls('y')
+
+# In sprites.py
+
+class BiggerMob(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.mobs  # Add to the mobs group
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE * 2, TILESIZE * 2))  # Make the image bigger
+        self.image.fill(DARKGREEN)  # Example color, replace with your desired image
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.vx, self.vy = 100, 100
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
+        self.speed = 1
+
+    def update(self):
+        # Similar update logic as the Mob class, adjust as needed
+        pass

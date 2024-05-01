@@ -44,14 +44,14 @@ class Game:
         self.load_data()
         self.running = True
         self.timer = 60  # 60 second timer
-        self.last_mob_spawn_time = 0
 
-    def spawn_mob(self):
-        # Generate random coordinates for mob spawn
+    def spawn_bigger_mob(self):
+        # Generate random coordinates for bigger mob spawn
         x = random.randint(0, (WIDTH // TILESIZE) - 1) * TILESIZE
         y = random.randint(0, (HEIGHT // TILESIZE) - 1) * TILESIZE
-        Mob(self, x, y)  # Create a new Mob instance at the generated coordinates
+        BiggerMob(self, x, y)  # Create a new BiggerMob instance at the generated coordinates
 
+    
     # load save game data
     def load_data(self):
         game_folder = path.dirname (__file__)
@@ -97,19 +97,11 @@ class Game:
     # define run method
     def run(self):
         self.playing = True
-        mob_spawn_timer = 0  # Initialize the variable here
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()
             self.update()
             self.draw()
-
-            # Increment timer
-            mob_spawn_timer += self.dt
-            # Check if it's time to spawn a mob
-            if mob_spawn_timer >= MOB_SPAWN_INTERVAL:
-                self.spawn_mob()
-                mob_spawn_timer = 0  # Reset the timer
 
 #define quit
     def quit(self):
@@ -124,11 +116,11 @@ class Game:
         if self.timer <= 0:
             self.show_start_screen()
             self.timer = 60 #reset timer
-        now = pg.time.get_ticks()
-        if now - self.last_mob_spawn_time >= MOB_SPAWN_INTERVAL * 1000:  # Convert seconds to milliseconds
-            self.last_mob_spawn_time = now
-            self.spawn_mob()
 
+    # Check if it's time to spawn a bigger mob (when 20 seconds are left)
+        if self.timer <= 20 and not self.bigger_mob_spawned:
+            self.spawn_bigger_mob()
+            self.bigger_mob_spawned = True  # Set a flag to prevent spawning multiple bigger mobs
 #define the grid
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
