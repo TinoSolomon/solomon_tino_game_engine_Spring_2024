@@ -27,23 +27,30 @@ import sys
 from settings import *
 from sprites import *
 from random import randint
+import random
 from os import path
 from time import sleep
 
 #game class
 class Game:
-    # define window size
     def __init__(self):
         pg.init()
-        #mixer for music
         pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         pg.key.set_repeat(500, 100)
+        self.all_sprites = pg.sprite.Group()  # Initialize all_sprites group
         self.load_data()
         self.running = True
-        self.timer = 90 #90 second timer
+        self.timer = 60  # 60 second timer
+        self.last_mob_spawn_time = 0
+
+    def spawn_mob(self):
+        # Generate random coordinates for mob spawn
+        x = random.randint(0, (WIDTH // TILESIZE) - 1) * TILESIZE
+        y = random.randint(0, (HEIGHT // TILESIZE) - 1) * TILESIZE
+        Mob(self, x, y)  # Create a new Mob instance at the generated coordinates
 
     # load save game data
     def load_data(self):
@@ -90,11 +97,19 @@ class Game:
     # define run method
     def run(self):
         self.playing = True
+        mob_spawn_timer = 0  # Initialize the variable here
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()
             self.update()
             self.draw()
+
+            # Increment timer
+            mob_spawn_timer += self.dt
+            # Check if it's time to spawn a mob
+            if mob_spawn_timer >= MOB_SPAWN_INTERVAL:
+                self.spawn_mob()
+                mob_spawn_timer = 0  # Reset the timer
 
 #define quit
     def quit(self):
@@ -108,7 +123,12 @@ class Game:
         self.timer -= self.dt
         if self.timer <= 0:
             self.show_start_screen()
-            self.timer = 90 #reset timer
+            self.timer = 60 #reset timer
+        now = pg.time.get_ticks()
+        if now - self.last_mob_spawn_time >= MOB_SPAWN_INTERVAL * 1000:  # Convert seconds to milliseconds
+            self.last_mob_spawn_time = now
+            self.spawn_mob()
+
 #define the grid
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -152,6 +172,7 @@ class Game:
         self.screen.fill(DARKGREEN)
         self.draw_text(self.screen, "Press Any Key To Start", 24, WHITE, WIDTH/2 - 32, 2)
         pg.display.flip()
+        self.reset_sprites()  # Reset sprites
 #load and loop music
         pg.mixer.music.load('start_menu_music.wav')
         pg.mixer.music.play(loops=-1)
@@ -170,6 +191,10 @@ class Game:
                     waiting = False
         pg.mixer.music.stop()
 
+    def reset_sprites(self):
+        self.all_sprites.empty()  # Remove all sprites from the all_sprites group
+        self.new()  # Create new sprites
+        self.player = self.player  # Set the player attribute again
 #instantiating game class (create instance of game)
 g = Game()
 while True:
@@ -178,10 +203,10 @@ while True:
     g.run()
 
 #showing the start screen
-g.show_start_screen()
-while (True):
-    g.new()
-    g.run()
+#g.show_start_screen()
+#while (True):
+#    g.new()
+#    g.run()
     # g.show_go_screen()
 
 #g.run()

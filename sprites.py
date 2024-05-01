@@ -36,6 +36,7 @@ class Player(pg.sprite.Sprite):
         self.spritesheet = Spritesheet(path.join(img_folder, 'theBell.png'))
         # needed for animated sprite
         self.spritesheet = Spritesheet(path.join(img_folder, SPRITESHEET))
+        self.load_images()
         # needed for animated sprite
         self.load_images()
         #self.image.fill(RED)
@@ -94,8 +95,8 @@ class Player(pg.sprite.Sprite):
     #        self.rect.y.width += 25
     # needed for animated sprite
     def load_images(self):
-        self.standing_frames = [self.spritesheet.get_image(0,0, 32, 32), 
-                                self.spritesheet.get_image(32,0, 32, 32)]
+        self.standing_frames = [self.spritesheet.get_image(0, 0, 32, 32), 
+                                self.spritesheet.get_image(32, 0, 32, 32)]
         # for frame in self.standing_frames:
         #     frame.set_colorkey(BLACK)
 
@@ -125,6 +126,7 @@ class Player(pg.sprite.Sprite):
         self.collide_with_group(self.game.coins, True)
         self.collide_with_group(self.game.power_ups, True)
         self.collide_with_mobs()  # Check for collisions with mobs
+        self.animate()
 
     def collide_with_mobs(self):
         hits = pg.sprite.spritecollide(self, self.game.mobs, False)
