@@ -45,11 +45,6 @@ class Game:
         self.running = True
         self.timer = 60  # 60 second timer
 
-    def spawn_bigger_mob(self):
-        # Generate random coordinates for bigger mob spawn
-        x = random.randint(0, (WIDTH // TILESIZE) - 1) * TILESIZE
-        y = random.randint(0, (HEIGHT // TILESIZE) - 1) * TILESIZE
-        BiggerMob(self, x, y)  # Create a new BiggerMob instance at the generated coordinates
 
     
     # load save game data
@@ -71,6 +66,7 @@ class Game:
         self.coins = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
         self.power_ups = pg.sprite.Group()
+        self.biggermobs = pg.sprite.Group()
         # self.player1 = Player(self, 1, 1)
         # for x in range(10, 20):
         #     Wall(self, x, 5)
@@ -89,6 +85,8 @@ class Game:
                     Mob(self, col, row)
                 if tile == 'U':
                     PowerUp(self, col, row)
+                if tile == 'B':
+                    BiggerMob(self, col, row)
     
     #load music and loop it
         pg.mixer.music.load('game_music.wav')
@@ -117,10 +115,6 @@ class Game:
             self.show_start_screen()
             self.timer = 60 #reset timer
 
-    # Check if it's time to spawn a bigger mob (when 20 seconds are left)
-        if self.timer <= 20 and not self.bigger_mob_spawned:
-            self.spawn_bigger_mob()
-            self.bigger_mob_spawned = True  # Set a flag to prevent spawning multiple bigger mobs
 #define the grid
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
