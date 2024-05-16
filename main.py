@@ -1,26 +1,5 @@
 # This file was created by: Tino Solomon
 
-#completed features:
-#music
-#start screen
-#dodge/dash with shift
-
-#need to do:
-#fix enemies
-#add health bar
-#enemy attacks and player attacks
-#sound effects
-#multiple rooms or levels
-#textures and images
-
-#want to do
-#big enemy with its own music and a big health bar
-#deflect enemy projectiles
-#xp bar to level up stats
-#charge up special move
-#animations
-
-
 #import necessary modules
 import pygame as pg
 import sys
@@ -85,13 +64,17 @@ class Game:
                     Mob(self, col, row)
                 if tile == 'U':
                     PowerUp(self, col, row)
-                if tile == 'B':
-                    BiggerMob(self, col, row)
     
     #load music and loop it
         pg.mixer.music.load('game_music.wav')
         pg.mixer.music.play(loops=-1)
-    
+
+    #spawn bigger mobs, modified from chatgpt
+    def spawn_bigger_mobs(self):
+        for row, tiles in enumerate(self.map_data):
+            for col, tile in enumerate(tiles):
+                if tile == 'B':
+                    BiggerMob(self, col, row)
     # define run method
     def run(self):
         self.playing = True
@@ -111,10 +94,14 @@ class Game:
         self.all_sprites.update()
         # Update timer
         self.timer -= self.dt
+        #inspired by chatgpt, heavily modified for gameplay
+        if 44.9 < self.timer <= 45:
+            self.spawn_bigger_mobs() #big mobs spawn in at 45 seconds
+        if self.timer <= 10: 
+            self.spawn_bigger_mobs() #big mobs spam from spawn points
         if self.timer <= 0:
-            self.show_start_screen()
-            self.timer = 60 #reset timer
-
+            self.show_start_screen() #end game
+            self.timer = 60  # Reset timer
 #define the grid
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -122,6 +109,7 @@ class Game:
         for y in range(0, WIDTH, TILESIZE):
             pg.draw.line(self.screen, TAN, (0, y), (WIDTH, y))
         
+        #from mr cozort
     def draw_text(self, surface, text, size, color, x, y):
         font_name = pg.font.match_font('arial')
         font = pg.font.Font(font_name, size)
@@ -134,7 +122,7 @@ class Game:
         self.screen.fill(BGCOLOR)
         self.draw_grid()
         self.all_sprites.draw(self.screen)
-        # Display timer in the top left corner
+        # Display timer in the top left corner - chatgpt
         self.draw_text(self.screen, f'Time: {int(self.timer)}', 18, WHITE, 10, 10)
         pg.display.flip()
 

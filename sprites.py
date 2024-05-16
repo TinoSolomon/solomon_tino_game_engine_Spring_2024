@@ -134,6 +134,12 @@ class Player(pg.sprite.Sprite):
             #print("Player collided with a mob!")  # Check if collision is detected
             self.game.show_start_screen()  # Reset the game to the title screen
 
+        # Check for collisions with BiggerMobs
+        big_hits = pg.sprite.spritecollide(self, self.game.biggermobs, False)
+        if big_hits:
+            # Handle collision with BiggerMob
+            self.game.show_start_screen()  # Reset the game to the title screen
+
     def collide_with_walls(self, dir):
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
@@ -163,6 +169,8 @@ class Player(pg.sprite.Sprite):
                 #print(hits[0].__class__.__name__)
                 self.speed -= 100
             if str(hits[0].__class__.__name__) == "Mob":
+                self.kill = False
+            if str(hits[0].__class__.__name__) == "BiggerMob":
                 self.kill = False
 
     #def update(self):
@@ -264,15 +272,14 @@ class Mob(pg.sprite.Sprite):
         self.rect.y = self.y
         self.collide_with_walls('y')
 
-# In sprites.py
-
+#a bigger mob inspired by original mob code
 class BiggerMob(pg.sprite.Sprite):
     def __init__(self, game, x, y):
-        self.groups = game.all_sprites, game.biggermob
+        self.groups = game.all_sprites, game.biggermobs
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE * 3, TILESIZE * 3))
-        self.image.fill(YELLOW)
+        self.image = pg.Surface((TILESIZE * 3, TILESIZE * 3)) #multiply size by 3 in width and height
+        self.image.fill(DARKGREEN)
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -310,7 +317,3 @@ class BiggerMob(pg.sprite.Sprite):
         self.collide_with_walls('x')
         self.rect.y = self.y
         self.collide_with_walls('y')
-
-    def update(self):
-        # Similar update logic as the Mob class, adjust as needed
-        pass
